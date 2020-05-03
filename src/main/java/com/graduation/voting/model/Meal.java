@@ -6,12 +6,12 @@ public class Meal extends AbstractNamedEntity {
 
     private Integer price;
 
-    private LocalDate localDate;
+    private LocalDate date;
 
-    public Meal(Integer id, String name, Integer price, LocalDate localDate) {
+    public Meal(Integer id, String name, Integer price, LocalDate date) {
         super(id, name);
         this.price = price;
-        this.localDate = localDate;
+        this.date = date;
     }
 
     public Integer getPrice() {
@@ -22,12 +22,12 @@ public class Meal extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
