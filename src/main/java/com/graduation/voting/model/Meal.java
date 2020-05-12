@@ -13,8 +13,8 @@ import java.time.LocalDate;
 public class Meal extends AbstractNamedEntity {
 
     @Column(name = "price", nullable = false)
-    @Range(min = 0, max = 99999)
-    private Double price;
+    @Range(min = 0)
+    private Integer price;
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -29,17 +29,17 @@ public class Meal extends AbstractNamedEntity {
     public Meal() {
             }
 
-    public Meal(Integer id, String name, Double price, LocalDate date) {
+    public Meal(Integer id, String name, Integer price, LocalDate date) {
         super(id, name);
         this.price = price;
         this.date = date;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
