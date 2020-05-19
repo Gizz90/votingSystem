@@ -51,6 +51,14 @@ public class Meal extends AbstractNamedEntity {
         this.date = date;
     }
 
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
     @Override
     public String toString() {
         return "Meal{" +

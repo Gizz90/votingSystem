@@ -3,9 +3,12 @@ package com.graduation.voting.service;
 import com.graduation.voting.model.Restaurant;
 import com.graduation.voting.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.graduation.voting.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class RestaurantService {
@@ -17,24 +20,28 @@ public class RestaurantService {
     }
 
     public Restaurant get(int id) {
-        return null;
+        return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
 
     public List<Restaurant> getAllWithCurrentMeals(LocalDate localDate) {
-        return null;
+        return restaurantRepository.getAllCurrent(localDate);
     }
 
     public List<Restaurant> getAll() {
-        return null;
+        return restaurantRepository.findAll();
     }
 
     public Restaurant create(Restaurant restaurant) {
-        return null;
+        Assert.notNull(restaurant, "restaurant must not be null");
+        return restaurantRepository.save(restaurant);
     }
 
     public void update(Restaurant restaurant) {
+        Assert.notNull(restaurant, "restaurant must not be null");
+        checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.getId());
     }
 
     public void delete(int id) {
+        restaurantRepository.deleteById(id);
     }
 }
