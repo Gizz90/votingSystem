@@ -1,17 +1,21 @@
 package com.graduation.voting.model;
 
+import org.hibernate.annotations.BatchSize;
+import org.springframework.util.CollectionUtils;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints =
-            @UniqueConstraint(columnNames = "email", name = "users_unique_email_idx"))
+@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx"))
 public class User extends AbstractNamedEntity {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -19,7 +23,7 @@ public class User extends AbstractNamedEntity {
     @NotBlank
     private String email;
 
-    @Column(name = "password",  nullable = false)
+    @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;
@@ -31,21 +35,27 @@ public class User extends AbstractNamedEntity {
     @Enumerated(value = EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
+    @BatchSize(size = 200)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User() {
     }
 
-    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, EnumSet.of(role, roles));
+    public User(User u) {
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getRegistered(), u.getRoles());
     }
 
-    public User(Integer id, String name, String email, String password, Set<Role> roles) {
+    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
+        this(id, name, email, password, new Date(), EnumSet.of(role, roles));
+    }
+
+    public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.registered = registered;
+        setRoles(roles);
     }
 
     public String getEmail() {
@@ -70,6 +80,10 @@ public class User extends AbstractNamedEntity {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
     public String getPassword() {

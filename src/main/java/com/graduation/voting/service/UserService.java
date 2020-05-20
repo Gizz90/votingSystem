@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public void delete(int id) {
-        userRepository.deleteById(id);
+        checkNotFoundWithId(userRepository.delete(id) != 0, id);
     }
 
     public User getByEmail(String email) {
