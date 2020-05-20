@@ -5,6 +5,7 @@ import com.graduation.voting.repository.VoteRepository;
 import com.graduation.voting.util.exception.NotFoundException;
 import com.graduation.voting.util.exception.VoteException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +28,7 @@ public class VoteService {
         this.userService = userService;
     }
 
+    @Transactional
     public Vote vote(Integer userId, Integer restaurantId, LocalTime time) {
         Optional<Vote> votes = voteRepository.findByUserIdAndDateVoting(userId, LocalDate.now());
         if (restaurantService.getAllWithCurrentMeals(LocalDate.now()).stream()
