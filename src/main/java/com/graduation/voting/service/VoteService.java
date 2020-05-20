@@ -1,6 +1,8 @@
 package com.graduation.voting.service;
 
 import com.graduation.voting.model.Vote;
+import com.graduation.voting.repository.RestaurantRepository;
+import com.graduation.voting.repository.UserRepository;
 import com.graduation.voting.repository.VoteRepository;
 import com.graduation.voting.util.exception.NotFoundException;
 import com.graduation.voting.util.exception.VoteException;
@@ -19,19 +21,19 @@ import static com.graduation.voting.util.DateTimeUtil.EXPIRED_TIME;
 public class VoteService {
 
     private final VoteRepository voteRepository;
-    private final RestaurantService restaurantService;
-    private final UserService userService;
+    private final RestaurantRepository restaurantRepository;
+    private final UserRepository userRepository;
 
-    public VoteService(VoteRepository voteRepository, RestaurantService restaurantService, UserService userService) {
+    public VoteService(VoteRepository voteRepository, RestaurantRepository restaurantRepository, UserRepository userRepository) {
         this.voteRepository = voteRepository;
-        this.restaurantService = restaurantService;
-        this.userService = userService;
+        this.restaurantRepository = restaurantRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public Vote vote(Integer userId, Integer restaurantId, LocalTime time) {
-        Optional<Vote> votes = voteRepository.findByUserIdAndDateVoting(userId, LocalDate.now());
-        if (restaurantService.getAllWithCurrentMeals(LocalDate.now()).stream()
+        Optional<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
+        if (restaurantRepository.getAllCurrent(LocalDate.now()).stream()
                 .noneMatch(restaurant -> Objects.equals(restaurant.getId(), restaurantId))) {
             throw new NotFoundException("Restaurant don't have meal today");
         }
@@ -39,10 +41,10 @@ public class VoteService {
             if (time.isAfter(EXPIRED_TIME)) {
                 throw new VoteException("it is after 11:00. it is too late, vote can't be changed");
             }
-            v.setRestaurant(restaurantService.get(restaurantId));
+            v.setRestaurant(restaurantRepository.getOne(restaurantId));
             return v;
-        }).orElse(new Vote(LocalDate.now(), userService.get(userId),
-                restaurantService.get(restaurantId))));
+        }).orElse(new Vote(LocalDate.now(), userRepository.getOne(userId),
+                restaurantRepository.getOne(restaurantId))));
     }
 
     public List<Vote> getAllByRestaurantId(int restId) {

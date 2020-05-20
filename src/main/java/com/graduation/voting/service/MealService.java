@@ -2,6 +2,8 @@ package com.graduation.voting.service;
 
 import com.graduation.voting.model.Meal;
 import com.graduation.voting.repository.MealRepository;
+import com.graduation.voting.repository.RestaurantRepository;
+import com.graduation.voting.util.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -15,11 +17,11 @@ import static com.graduation.voting.util.ValidationUtil.checkNotFoundWithId;
 public class MealService {
 
     private final MealRepository mealRepository;
-    private final RestaurantService restaurantService;
+    private final RestaurantRepository restaurantRepository;
 
-    public MealService(MealRepository mealRepository, RestaurantService restaurantService) {
+    public MealService(MealRepository mealRepository, RestaurantRepository restaurantRepository) {
         this.mealRepository = mealRepository;
-        this.restaurantService = restaurantService;
+        this.restaurantRepository = restaurantRepository;
     }
 
     public Meal get(int id, int restaurantId) {
@@ -29,13 +31,16 @@ public class MealService {
     }
 
     public void delete(int id, int restaurantId) {
-        checkNotFoundWithId(mealRepository.delete(id, restaurantId), id);
+        checkNotFoundWithId(mealRepository.delete(id, restaurantId) != 0, id);
     }
 
     @Transactional
     public void update(Meal meal, int restaurantId) {
         Assert.notNull(meal, "meal must not be null");
-        meal.setRestaurant(restaurantService.get(restaurantId));
+        if (!meal.isNew() && get(meal.getId(), restaurantId) == null) {
+            throw new NotFoundException("Not found entity with id" + meal.getId());
+        }
+        meal.setRestaurant(restaurantRepository.getOne(restaurantId));
         meal.setDate(LocalDate.now());
         checkNotFoundWithId(mealRepository.save(meal), meal.getId());
     }
@@ -43,7 +48,7 @@ public class MealService {
     @Transactional
     public Meal create(Meal meal, int restaurantId) {
         Assert.notNull(meal, "meal must not be null");
-        meal.setRestaurant(restaurantService.get(restaurantId));
+        meal.setRestaurant(restaurantRepository.getOne(restaurantId));
         meal.setDate(LocalDate.now());
         return mealRepository.save(meal);
     }

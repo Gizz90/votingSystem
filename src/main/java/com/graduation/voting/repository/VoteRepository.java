@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
-    Optional<Vote> findByUserIdAndDateVoting(Integer userId, LocalDate now);
+    Optional<Vote> findByUserIdAndDate(Integer userId, LocalDate now);
 
     List<Vote> findAllByRestaurantIdOrderByDateDesc(int restaurantId);
 
