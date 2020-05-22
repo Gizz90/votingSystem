@@ -23,8 +23,7 @@ VALUES ('ROLE_ADMIN', 100000),
 
 INSERT INTO restaurants (name)
 VALUES ('Restaurant1'),
-       ('Restaurant2'),
-       ('Restaurant3');
+       ('Restaurant2');
 
 INSERT INTO meals (name, date, price, restaurant_id)
 VALUES ('chicken noodles', '2020-04-01', '1000', 100003),

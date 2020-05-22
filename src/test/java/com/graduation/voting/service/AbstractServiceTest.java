@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class AbstractServiceTest {
+public abstract class AbstractServiceTest {
 
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;

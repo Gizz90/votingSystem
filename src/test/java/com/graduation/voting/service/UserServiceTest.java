@@ -36,9 +36,10 @@ public class UserServiceTest extends AbstractServiceTest {
         userService.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
+    @Test
     public void delete() throws Exception {
         userService.delete(USER_ID);
-        Assert.assertNull(userRepository.findById(USER_ID));
+        Assert.assertNull(userRepository.findById(USER_ID).orElse(null));
     }
 
     @Test(expected = NotFoundException.class)

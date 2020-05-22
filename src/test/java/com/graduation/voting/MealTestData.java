@@ -11,7 +11,7 @@ import static java.time.LocalDate.of;
 public class MealTestData {
     public static TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingFieldsComparator("restaurant");
 
-    public static final int MEAL1_ID = AbstractBaseEntity.START_SEQ + 6;
+    public static final int MEAL1_ID = AbstractBaseEntity.START_SEQ + 5;
 
     public static final Meal MEAL1 = new Meal(MEAL1_ID, "chicken noodles", 1000, of(2020, 4, 1));
     public static final Meal MEAL2 = new Meal(MEAL1_ID + 1, "roast beef", 1500, of(2020, 4, 1));
@@ -31,7 +31,7 @@ public class MealTestData {
 
     public static final List<Meal> RESTAURANT1_MEALS = List.of(MEAL11, MEAL12, MEAL13, MEAL1, MEAL2, MEAL3, MEAL4, MEAL5);
     public static final List<Meal> RESTAURANT1_MEALS_2020_04_01 = List.of(MEAL1, MEAL2, MEAL3, MEAL4, MEAL5);
-    public static final List<Meal> RESTAURANT2_MEALS = List.of(MEAL6, MEAL7, MEAL8, MEAL9, MEAL10);
+    public static final List<Meal> RESTAURANT2_MEALS = List.of(MEAL14, MEAL15, MEAL6, MEAL7, MEAL8, MEAL9, MEAL10);
 
     public static Meal getNew() {
         return new Meal(null, "newMeal", 1000, now());
