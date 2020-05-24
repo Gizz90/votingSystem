@@ -41,17 +41,19 @@ public class VoteService {
             if (time.isAfter(EXPIRED_TIME)) {
                 throw new VoteException("it is after 11:00. it is too late, vote can't be changed");
             }
-            v.setRestaurant(restaurantRepository.getOne(restaurantId));
+            v.setRestaurant(restaurantRepository.findById(restaurantId).orElseThrow(()
+                            -> new NotFoundException("No restaurant with id=" + restaurantId)));
             return v;
-        }).orElse(new Vote(LocalDate.now(), userRepository.getOne(userId),
-                restaurantRepository.getOne(restaurantId))));
+        }).orElse(new Vote(LocalDate.now(), userRepository.findById(userId).orElse(null),
+                restaurantRepository.findById(restaurantId).orElseThrow(()
+                            -> new NotFoundException("No restaurant with id=" + restaurantId)))));
     }
 
     public List<Vote> getAllByRestaurantId(int restId) {
-        return voteRepository.findAllByRestaurantIdOrderByDateDesc(restId);
+        return voteRepository.findAllByRestaurantIdOrderByDateDescUserAsc(restId);
     }
 
     public List<Vote> getAllByDate(LocalDate date) {
-        return voteRepository.findAllByDateOrderByRestaurantIdAsc(date);
+        return voteRepository.findAllByDateOrderByRestaurantIdAscIdAsc(date);
     }
 }

@@ -74,7 +74,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void getAllWithCurrentMeals() {
         final List<Restaurant> all = restaurantService.getAllWithCurrentMeals(LocalDate.of(2020, 04, 01));
-        //RESTAURANT_MATCHER.assertMatch(all, RESTAURANT1, RESTAURANT2);
+        RESTAURANT_MATCHER.assertMatch(all, RESTAURANT1, RESTAURANT2);
         all.forEach(restaurant ->
                 MEAL_MATCHER.assertMatch(
                         restaurant.getMeals(),

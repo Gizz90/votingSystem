@@ -38,8 +38,8 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() throws Exception {
-        userService.delete(USER_ID);
-        Assert.assertNull(userRepository.findById(USER_ID).orElse(null));
+        userService.delete(USER1_ID);
+        Assert.assertNull(userRepository.findById(USER1_ID).orElse(null));
     }
 
     @Test(expected = NotFoundException.class)
@@ -49,8 +49,8 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void get() throws Exception {
-        User user = userService.get(USER_ID);
-        USER_MATCHER.assertMatch(user, USER);
+        User user = userService.get(USER1_ID);
+        USER_MATCHER.assertMatch(user, USER1);
     }
 
     @Test(expected = NotFoundException.class)
@@ -61,19 +61,19 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void getByEmail() throws Exception {
         User user = userService.getByEmail("user@yandex.ru");
-        USER_MATCHER.assertMatch(user, USER);
+        USER_MATCHER.assertMatch(user, USER1);
     }
 
     @Test
     public void update() throws Exception {
         User updated = getUpdated();
         userService.update(updated);
-        USER_MATCHER.assertMatch(userService.get(USER_ID), updated);
+        USER_MATCHER.assertMatch(userService.get(USER1_ID), updated);
     }
 
     @Test
     public void getAll() throws Exception {
         List<User> all = userService.getAll();
-        USER_MATCHER.assertMatch(all, ADMIN, USER, USER2);
+        USER_MATCHER.assertMatch(all, ADMIN, USER1, USER2);
     }
 }

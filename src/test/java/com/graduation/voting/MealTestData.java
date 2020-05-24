@@ -23,11 +23,11 @@ public class MealTestData {
     public static final Meal MEAL8 = new Meal(MEAL1_ID + 7, "shrimps", 1100, of(2020, 4, 1));
     public static final Meal MEAL9 = new Meal(MEAL1_ID + 8, "spaghetti", 800, of(2020, 4, 1));
     public static final Meal MEAL10 = new Meal(MEAL1_ID + 9, "cappuccino", 150, of(2020, 4, 1));
-    public static final Meal MEAL11 = new Meal(MEAL1_ID + 10, "fish soup", 1000, of(2020, 4, 2));
-    public static final Meal MEAL12 = new Meal(MEAL1_ID + 11, "schnitzel", 1800, of(2020, 4, 2));
-    public static final Meal MEAL13 = new Meal(MEAL1_ID + 12, "salmon", 1300, of(2020, 4, 2));
-    public static final Meal MEAL14 = new Meal(MEAL1_ID + 13, "omelette", 500, of(2020, 4, 2));
-    public static final Meal MEAL15 = new Meal(MEAL1_ID + 14, "coffee", 100, of(2020, 4, 2));
+    public static final Meal MEAL11 = new Meal(MEAL1_ID + 10, "fish soup", 1000, now());
+    public static final Meal MEAL12 = new Meal(MEAL1_ID + 11, "schnitzel", 1800, now());
+    public static final Meal MEAL13 = new Meal(MEAL1_ID + 12, "salmon", 1300, now());
+    public static final Meal MEAL14 = new Meal(MEAL1_ID + 13, "omelette", 500, now());
+    public static final Meal MEAL15 = new Meal(MEAL1_ID + 14, "coffee", 100, now());
 
     public static final List<Meal> RESTAURANT1_MEALS = List.of(MEAL11, MEAL12, MEAL13, MEAL1, MEAL2, MEAL3, MEAL4, MEAL5);
     public static final List<Meal> RESTAURANT1_MEALS_2020_04_01 = List.of(MEAL1, MEAL2, MEAL3, MEAL4, MEAL5);

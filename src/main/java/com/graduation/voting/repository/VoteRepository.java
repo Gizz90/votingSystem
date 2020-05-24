@@ -13,7 +13,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     Optional<Vote> findByUserIdAndDate(Integer userId, LocalDate now);
 
-    List<Vote> findAllByRestaurantIdOrderByDateDesc(int restaurantId);
+    List<Vote> findAllByRestaurantIdOrderByDateDescUserAsc(int restaurantId);
 
-    List<Vote> findAllByDateOrderByRestaurantIdAsc(LocalDate date);
+    List<Vote> findAllByDateOrderByRestaurantIdAscIdAsc(LocalDate date);
 }
