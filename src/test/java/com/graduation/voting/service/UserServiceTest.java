@@ -4,13 +4,14 @@ import com.graduation.voting.model.Role;
 import com.graduation.voting.model.User;
 import com.graduation.voting.repository.UserRepository;
 import com.graduation.voting.util.exception.NotFoundException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static com.graduation.voting.UserTestData.*;
 
 public class UserServiceTest extends AbstractServiceTest {
@@ -31,20 +32,21 @@ public class UserServiceTest extends AbstractServiceTest {
         USER_MATCHER.assertMatch(userService.get(newId), newUser);
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void duplicateMailCreate() throws Exception {
-        userService.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
+        assertThrows(DataAccessException.class, () ->
+        userService.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
     }
 
     @Test
     public void delete() throws Exception {
         userService.delete(USER1_ID);
-        Assert.assertNull(userRepository.findById(USER1_ID).orElse(null));
+        Assertions.assertNull(userRepository.findById(USER1_ID).orElse(null));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deletedNotFound() throws Exception {
-        userService.delete(1);
+        assertThrows(NotFoundException.class, () -> userService.delete(1));
     }
 
     @Test
@@ -53,9 +55,9 @@ public class UserServiceTest extends AbstractServiceTest {
         USER_MATCHER.assertMatch(user, USER1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
-        userService.get(1);
+        assertThrows(NotFoundException.class, () -> userService.get(1));
     }
 
     @Test

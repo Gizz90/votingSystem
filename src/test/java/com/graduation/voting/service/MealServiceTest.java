@@ -3,8 +3,8 @@ package com.graduation.voting.service;
 import com.graduation.voting.model.Meal;
 import com.graduation.voting.repository.MealRepository;
 import com.graduation.voting.util.exception.NotFoundException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import static com.graduation.voting.MealTestData.*;
 import static com.graduation.voting.RestaurantTestData.RESTAURANT1_ID;
 import static com.graduation.voting.RestaurantTestData.RESTAURANT2_ID;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MealServiceTest extends AbstractServiceTest {
 
@@ -30,18 +31,18 @@ public class MealServiceTest extends AbstractServiceTest {
     @Test
     public void delete() {
         mealService.delete(MEAL1_ID, RESTAURANT1_ID);
-        Assert.assertNull(mealRepository.getOneMeal(MEAL1_ID, RESTAURANT1_ID));
+        Assertions.assertNull(mealRepository.getOneMeal(MEAL1_ID, RESTAURANT1_ID));
     }
 
     @Test
     public void deleteNotFound() throws Exception {
-        Assert.assertThrows(NotFoundException.class,
+        assertThrows(NotFoundException.class,
                 () -> mealService.delete(1, RESTAURANT1_ID));
     }
 
     @Test
     public void deleteNotOwn() throws Exception {
-        Assert.assertThrows(NotFoundException.class,
+        assertThrows(NotFoundException.class,
                 () -> mealService.delete(MEAL1_ID, RESTAURANT2_ID));
     }
 
@@ -64,9 +65,9 @@ public class MealServiceTest extends AbstractServiceTest {
 
     @Test
     public void updateNotFound() throws Exception {
-        NotFoundException ex = Assert.assertThrows(NotFoundException.class,
+        NotFoundException ex = assertThrows(NotFoundException.class,
                 () -> mealService.update(MEAL1, RESTAURANT2_ID));
-        Assert.assertEquals("Not found entity with id=" + MEAL1_ID, ex.getMessage());
+        Assertions.assertEquals("Not found entity with id=" + MEAL1_ID, ex.getMessage());
     }
 
     @Test

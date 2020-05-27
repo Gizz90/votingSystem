@@ -2,8 +2,8 @@ package com.graduation.voting.service;
 
 import com.graduation.voting.model.Vote;
 import com.graduation.voting.util.exception.VoteException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -36,7 +36,7 @@ public class VoteServiceTest extends AbstractServiceTest {
     }
     @Test
     public void voteAfterExpiredTime() {
-        Assert.assertThrows(VoteException.class,
+        Assertions.assertThrows(VoteException.class,
                 () -> voteService.vote(USER1_ID, RESTAURANT2_ID, LocalTime.of(11,00).plus(1, ChronoUnit.NANOS)));
     }
 

@@ -3,8 +3,8 @@ package com.graduation.voting.service;
 import com.graduation.voting.model.Restaurant;
 import com.graduation.voting.repository.RestaurantRepository;
 import com.graduation.voting.util.exception.NotFoundException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void getNotFound() {
-        Assert.assertThrows(NotFoundException.class,
+        Assertions.assertThrows(NotFoundException.class,
                 () -> restaurantService.get(1));
     }
 
@@ -56,12 +56,12 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void delete() {
         restaurantService.delete(RESTAURANT1_ID);
-        Assert.assertNull(restaurantRepository.findById(RESTAURANT1_ID).orElse(null));
+        Assertions.assertNull(restaurantRepository.findById(RESTAURANT1_ID).orElse(null));
     }
 
     @Test
     public void deleteNotFound() {
-        Assert.assertThrows(NotFoundException.class,
+        Assertions.assertThrows(NotFoundException.class,
                 () -> restaurantService.delete(1));
     }
 
