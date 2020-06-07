@@ -9,7 +9,7 @@ import static java.time.LocalDate.now;
 import static java.time.LocalDate.of;
 
 public class MealTestData {
-    public static TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingFieldsComparator("restaurant");
+    public static TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingFieldsComparator(Meal.class, "restaurant");
 
     public static final int MEAL1_ID = AbstractBaseEntity.START_SEQ + 5;
 

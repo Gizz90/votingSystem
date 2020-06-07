@@ -13,7 +13,7 @@ import static java.time.LocalDate.now;
 import static java.time.LocalDate.of;
 
 public class VoteTestData {
-    public static TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingFieldsComparator();
+    public static TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingFieldsComparator(Vote.class);
 
     public static final int VOTE1_ID = START_SEQ + 20;
 

@@ -10,7 +10,7 @@ import static com.graduation.voting.model.Role.ROLE_ADMIN;
 import static com.graduation.voting.model.Role.ROLE_USER;
 
 public class UserTestData {
-    public static TestMatcher<User> USER_MATCHER = TestMatcher.usingFieldsComparator("registered", "roles");
+    public static TestMatcher<User> USER_MATCHER = TestMatcher.usingFieldsComparator(User.class, "registered", "roles");
 
     public static final int ADMIN_ID = START_SEQ;
     public static final int USER1_ID = START_SEQ + 1;

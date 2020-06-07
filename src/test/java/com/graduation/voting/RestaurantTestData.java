@@ -7,7 +7,7 @@ import static com.graduation.voting.MealTestData.RESTAURANT1_MEALS;
 import static com.graduation.voting.MealTestData.RESTAURANT2_MEALS;
 
 public class RestaurantTestData {
-    public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsComparator("meals");
+    public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsComparator(Restaurant.class, "meals");
 
     public static final int RESTAURANT1_ID = AbstractBaseEntity.START_SEQ + 3;
     public static final int RESTAURANT2_ID = AbstractBaseEntity.START_SEQ + 4;
