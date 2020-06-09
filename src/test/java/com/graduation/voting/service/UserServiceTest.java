@@ -69,13 +69,13 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void update() throws Exception {
         User updated = getUpdated();
-        userService.update(updated);
+        userService.update(new User(updated));
         USER_MATCHER.assertMatch(userService.get(USER1_ID), updated);
     }
 
     @Test
     public void getAll() throws Exception {
         List<User> all = userService.getAll();
-        USER_MATCHER.assertMatch(all, ADMIN, USER1, USER2);
+        USER_MATCHER.assertMatch(all, USER1, ADMIN, USER2);
     }
 }

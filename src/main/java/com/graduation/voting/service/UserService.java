@@ -30,7 +30,7 @@ public class UserService {
 
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        checkNotFoundWithId(userRepository.save(user), user.getId());
+        checkNotFoundWithId(userRepository.save(user), user.id());
     }
 
     public void delete(int id) {

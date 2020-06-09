@@ -14,8 +14,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", uniqueConstraints =
-@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx"))
+@Table(name = "users", uniqueConstraints ={@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -25,7 +24,7 @@ public class User extends AbstractNamedEntity {
 
     @Column(name = "password", nullable = false)
     @NotBlank
-    @Size(min = 6, max = 20)
+    @Size(min = 4, max = 20)
     private String password;
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")

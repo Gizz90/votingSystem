@@ -11,12 +11,12 @@ FROM users;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
-VALUES ('Admin', 'admin@gmail.com', 'admin'),
-       ('User', 'user@yandex.ru', 'password'),
+VALUES ('User', 'user@yandex.ru', 'password'),
+       ('Admin', 'admin@gmail.com', 'admin'),
        ('Mike', 'newuser@gmail.com', 'mike');
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('ROLE_ADMIN', 100000),
+VALUES ('ROLE_ADMIN', 100001),
        ('ROLE_USER', 100000),
        ('ROLE_USER', 100001),
        ('ROLE_USER', 100002);
@@ -45,8 +45,8 @@ VALUES ('chicken noodles', '2020-04-01', '1000', 100003),
        ('coffee', now(), '100', 100004);
 
 INSERT INTO votes (date, user_id, restaurant_id)
-VALUES ('2020-04-01', 100000, 100003),
-       ('2020-04-01', 100001, 100004),
+VALUES ('2020-04-01', 100001, 100004),
+       ('2020-04-01', 100000, 100003),
        ('2020-04-01', 100002, 100003),
-       (now(), 100000, 100004),
-       (now(), 100001, 100004);
+       (now(), 100001, 100004),
+       (now(), 100000, 100004);
