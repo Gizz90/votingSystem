@@ -50,20 +50,20 @@ public class AdminRestaurantController {
         return restaurantService.getAllWithCurrentMeals(date);
     }
 
-    @PostMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         checkNew(restaurant);
         log.info("create {}", restaurant);
         Restaurant created = restaurantService.create(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path(REST_URL + "/restaurants/{id}")
+                .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId())
                 .toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable("id") int id) {
         assureIdConsistent(restaurant, id);
@@ -71,7 +71,7 @@ public class AdminRestaurantController {
         restaurantService.update(restaurant);
     }
 
-    @DeleteMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") int id) {
         log.info("delete restaurant with id={}", id);
