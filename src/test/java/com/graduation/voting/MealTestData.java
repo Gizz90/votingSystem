@@ -38,7 +38,7 @@ public class MealTestData {
     }
 
     public static Meal getUpdated() {
-        return new Meal(MEAL1_ID, "updatedMeal", 1500, MEAL1.getDate());
+        return new Meal(MEAL1_ID, "updatedMeal", 1500, now());
     }
 
 }

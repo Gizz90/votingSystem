@@ -1,5 +1,6 @@
 package com.graduation.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "meals_unique_restaurant_date_idx")})
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date", "name"}, name = "meals_unique_restaurant_date_name_idx")})
 public class Meal extends AbstractNamedEntity {
 
     @Column(name = "date", nullable = false)
@@ -23,7 +24,7 @@ public class Meal extends AbstractNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @JsonIgnore
     private Restaurant restaurant;
 
     public Meal() {
@@ -33,6 +34,12 @@ public class Meal extends AbstractNamedEntity {
         super(id, name);
         this.price = price;
         this.date = date;
+    }
+
+    public Meal(Integer id, String name, Integer price, LocalDate date, Restaurant restaurant) {
+        this(id, name, price, date);
+        this.restaurant = restaurant;
+
     }
 
     public Integer getPrice() {

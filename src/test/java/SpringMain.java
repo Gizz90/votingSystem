@@ -1,9 +1,14 @@
+import com.graduation.voting.service.MealService;
 import com.graduation.voting.service.UserService;
 import com.graduation.voting.web.controller.AdminController;
+import com.graduation.voting.web.controller.AdminMealController;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Arrays;
+
+import static com.graduation.voting.MealTestData.*;
+import static com.graduation.voting.RestaurantTestData.RESTAURANT1_ID;
 
 public class SpringMain {
 
@@ -21,6 +26,15 @@ public class SpringMain {
 
             AdminController adminController = appCtx.getBean(AdminController.class);
             System.out.println(adminController.getAll());
+
+            MealService mealService = appCtx.getBean(MealService.class);
+
+            System.out.println("\n_______________________________");
+
+            AdminMealController mealController = appCtx.getBean(AdminMealController.class);
+            mealController.update(getUpdated(), RESTAURANT1_ID, MEAL1_ID);
+            System.out.println(mealController.get(MEAL1_ID, RESTAURANT1_ID));
+            mealController.save(getNew(), RESTAURANT1_ID);
 //            System.out.println("\n_______________________________");
 //            RestaurantService restaurantService = appCtx.getBean(RestaurantService.class);
 //            restaurantService.create(new Restaurant(null, "New_Restaurant_1"));
