@@ -1,7 +1,11 @@
 package com.graduation.voting.service;
 
+import com.graduation.voting.VoteTestData;
 import com.graduation.voting.model.Vote;
+import com.graduation.voting.repository.VoteRepository;
+import com.graduation.voting.util.exception.NotFoundException;
 import com.graduation.voting.util.exception.VoteException;
+import com.graduation.voting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,44 +15,82 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.graduation.voting.RestaurantTestData.RESTAURANT1_ID;
 import static com.graduation.voting.RestaurantTestData.RESTAURANT2_ID;
-import static com.graduation.voting.UserTestData.USER1_ID;
-import static com.graduation.voting.UserTestData.USER2_ID;
+import static com.graduation.voting.UserTestData.*;
 import static com.graduation.voting.VoteTestData.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class VoteServiceTest extends AbstractServiceTest {
+
+class VoteServiceTest extends AbstractControllerTest {
 
     @Autowired
     private VoteService voteService;
+    @Autowired
+    private VoteRepository voteRepository;
 
     @Test
-    public void vote() {
-        Vote created = getNew();
-        Vote newVote = voteService.vote(USER2_ID, RESTAURANT2_ID, LocalTime.now());
+    void get() {
+        Vote actual = voteService.get(VOTE1_ID, ADMIN_ID);
+        VOTE_MATCHER.assertMatch(actual, VOTE1_ADMIN_RESTAURANT1);
+    }
+
+    @Test
+    void create() {
+        Vote created = VoteTestData.getNew();
+        Vote newVote = voteService.create(created, USER2_ID, RESTAURANT1_ID);
         created.setId(newVote.getId());
         VOTE_MATCHER.assertMatch(created, newVote);
     }
 
     @Test
-    public void voteBeforeExpiredTime() {
-        voteService.vote(USER1_ID, RESTAURANT2_ID, LocalTime.of(10,00));
-        voteService.vote(USER1_ID, RESTAURANT2_ID, LocalTime.of(10,59));
-    }
-    @Test
-    public void voteAfterExpiredTime() {
-        Assertions.assertThrows(VoteException.class,
-                () -> voteService.vote(USER1_ID, RESTAURANT2_ID, LocalTime.of(11,00).plus(1, ChronoUnit.NANOS)));
+    void updateBeforeExpiredTime() {
+        Vote updated = VoteTestData.getUpdated();
+        voteService.update(updated, USER1_ID, RESTAURANT2_ID, LocalTime.of(10, 59));
     }
 
     @Test
-    public void getAllByRestaurantId() {
+    void updateAfterExpiredTime() {
+        Vote updated = VoteTestData.getUpdated();
+        Assertions.assertThrows(VoteException.class,
+                () -> voteService.update(updated, USER1_ID, RESTAURANT2_ID, LocalTime.of(11, 00).plus(1, ChronoUnit.NANOS)));
+    }
+
+    @Test
+    public void updateNotFound() throws Exception {
+        NotFoundException ex = assertThrows(NotFoundException.class,
+                () -> voteService.update(VOTE1_ADMIN_RESTAURANT1, USER2_ID, RESTAURANT2_ID, LocalTime.now()));
+        Assertions.assertEquals("Not found entity with id=" + VOTE1_ID, ex.getMessage());
+    }
+
+    @Test
+    void delete() {
+        voteService.delete(VOTE1_ID);
+        Assertions.assertNull(voteRepository.findById(VOTE1_ID).orElse(null));
+    }
+
+    @Test
+    public void deleteNotFound() {
+        Assertions.assertThrows(NotFoundException.class,
+                () -> voteService.delete(1));
+    }
+
+    @Test
+    void getAllByRestaurantId() {
         List<Vote> all = voteService.getAllByRestaurantId(RESTAURANT2_ID);
         VOTE_MATCHER.assertMatch(all, RESTAURANT2_VOTES);
     }
 
     @Test
-    public void getAllByDate() {
-        List<Vote> all = voteService.getAllByDate(LocalDate.of(2020,04,01));
+    void getAllByDate() {
+        List<Vote> all = voteService.getAllByDate(LocalDate.of(2020, 04, 01));
         VOTE_MATCHER.assertMatch(all, VOTES_ON_2020_04_01);
     }
+
+    @Test
+    void getAllByUserId() {
+        List<Vote> allByUser = voteService.getAllByUserId(USER1_ID);
+        VOTE_MATCHER.assertMatch(allByUser, USER1_VOTES);
+    }
+
 }

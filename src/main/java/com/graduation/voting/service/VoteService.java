@@ -5,52 +5,67 @@ import com.graduation.voting.repository.RestaurantRepository;
 import com.graduation.voting.repository.UserRepository;
 import com.graduation.voting.repository.VoteRepository;
 import com.graduation.voting.util.exception.NotFoundException;
-import com.graduation.voting.util.exception.VoteException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
-import static com.graduation.voting.util.DateTimeUtil.EXPIRED_TIME;
+import static com.graduation.voting.util.ValidationUtil.checkDateTime;
+import static com.graduation.voting.util.ValidationUtil.checkNotFoundWithId;
+import static java.time.LocalDate.*;
 
 @Service
 public class VoteService {
 
     private final VoteRepository voteRepository;
-    private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public VoteService(VoteRepository voteRepository, RestaurantRepository restaurantRepository, UserRepository userRepository) {
+    @Autowired
+    public VoteService(VoteRepository voteRepository, UserRepository userRepository, RestaurantRepository restaurantRepository) {
         this.voteRepository = voteRepository;
-        this.restaurantRepository = restaurantRepository;
         this.userRepository = userRepository;
+        this.restaurantRepository = restaurantRepository;
+    }
+
+    public Vote get(int id, int userId) {
+        return checkNotFoundWithId(voteRepository.findById(id).filter(vote -> vote.getUser().getId() == userId).orElse(null), id);
     }
 
     @Transactional
-    public Vote vote(Integer userId, Integer restaurantId, LocalTime time) {
-        Optional<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
-        if (restaurantRepository.getAllCurrent(LocalDate.now()).stream()
-                .noneMatch(restaurant -> Objects.equals(restaurant.getId(), restaurantId))) {
-            throw new NotFoundException("Restaurant don't have meal today");
-        }
-        return voteRepository.save(votes.map(v -> {
-            if (time.isAfter(EXPIRED_TIME)) {
-                throw new VoteException("it is after 11:00. it is too late, vote can't be changed");
-            }
-            v.setRestaurant(restaurantRepository.findById(restaurantId).orElseThrow(()
-                            -> new NotFoundException("No restaurant with id=" + restaurantId)));
-            return v;
-        }).orElse(new Vote(LocalDate.now(), userRepository.findById(userId).orElse(null),
-                restaurantRepository.findById(restaurantId).orElseThrow(()
-                            -> new NotFoundException("No restaurant with id=" + restaurantId)))));
+    public Vote create(Vote vote, int userId, int restaurantId) {
+        Assert.notNull(vote, "vote must not be null");
+        vote.setUser(userRepository.getOne(userId));
+        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        vote.setDate(now());
+        return voteRepository.save(vote);
     }
 
-    public List<Vote> getAllByRestaurantId(int restId) {
-        return voteRepository.findAllByRestaurantIdOrderByDateDescUserAsc(restId);
+    @Transactional
+    public void update(Vote vote, int userId, int restaurantId, LocalTime time) {
+        Assert.notNull(vote, "vote must not be null");
+        if (!vote.isNew() && get(vote.getId(), userId) == null) {
+            throw new NotFoundException("Not found entity with id" + vote.getId());
+        }
+        checkDateTime(vote.getDate(), time);
+        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        checkNotFoundWithId(voteRepository.save(vote), userId);
+    }
+
+    public void delete(int id) {
+        checkNotFoundWithId(voteRepository.delete(id) != 0, id);
+    }
+
+    public List<Vote> getAllByUserId(int userId) {
+        return checkNotFoundWithId(voteRepository.getAllByUserId(userId), userId);
+    }
+
+    public List<Vote> getAllByRestaurantId(int restaurantId) {
+        return checkNotFoundWithId(voteRepository.findAllByRestaurantIdOrderByDateDescUserAsc(restaurantId), restaurantId);
     }
 
     public List<Vote> getAllByDate(LocalDate date) {

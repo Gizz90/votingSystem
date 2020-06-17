@@ -1,5 +1,6 @@
 package com.graduation.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,13 +18,13 @@ public class Vote extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @JsonIgnore
     private Restaurant restaurant;
 
     public Vote() {
@@ -40,11 +41,11 @@ public class Vote extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDate getDateTime() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDateTime(LocalDate date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

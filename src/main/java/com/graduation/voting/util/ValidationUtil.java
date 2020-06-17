@@ -2,8 +2,16 @@ package com.graduation.voting.util;
 
 import com.graduation.voting.model.AbstractBaseEntity;
 import com.graduation.voting.util.exception.NotFoundException;
+import com.graduation.voting.util.exception.VoteException;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import static java.time.LocalTime.*;
 
 public class ValidationUtil {
+
+    public final static LocalTime EXPIRED_TIME = of(11, 00); // 11 00
 
     private ValidationUtil() {
     }
@@ -41,5 +49,23 @@ public class ValidationUtil {
         } else if (entity.getId() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
+    }
+
+    public static void checkDateTime(LocalDate date, LocalTime time) {
+        LocalDate today = LocalDate.now();
+        if (!today.isEqual(date)) {
+            throw new VoteException("You voted on " + date + ". You can not change it today " + today);
+        }
+        checkTime(time);
+    }
+
+    public static void checkTime(LocalTime time) {
+        if (EXPIRED_TIME.isBefore(time)) {
+            throw new VoteException("it is after 11:00. it is too late, vote can't be changed");
+        }
+    }
+
+    public static boolean isTimeExpired() {
+        return EXPIRED_TIME.isBefore(now());
     }
 }
