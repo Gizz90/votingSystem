@@ -18,10 +18,10 @@ public class VoteTestData {
     public static final int VOTE1_ID = START_SEQ + 20;
     public static final int VOTE2_ID = START_SEQ + 21;
 
-    public static final Vote VOTE1_ADMIN_RESTAURANT1 = new Vote(VOTE1_ID, of(2020, 04, 01), ADMIN, RESTAURANT2);
+    public static final Vote VOTE1_ADMIN_RESTAURANT1 = new Vote(VOTE1_ID, of(2020, 04, 01), USER_ADMIN, RESTAURANT2);
     public static final Vote VOTE2_USER1_RESTAURANT2 = new Vote(VOTE1_ID + 1, of(2020, 04, 01), USER1, RESTAURANT1);
     public static final Vote VOTE3_USER2_RESTAURANT1 = new Vote(VOTE1_ID + 2, of(2020, 04, 01), USER2, RESTAURANT1);
-    public static final Vote VOTE4_ADMIN_RESTAURANT2 = new Vote(VOTE1_ID + 3, now(), ADMIN, RESTAURANT2);
+    public static final Vote VOTE4_ADMIN_RESTAURANT2 = new Vote(VOTE1_ID + 3, now(), USER_ADMIN, RESTAURANT2);
     public static final Vote VOTE5_USER2_RESTAURANT2 = new Vote(VOTE1_ID + 4, now(), USER2, RESTAURANT2);
 
     //    public static final List<Vote> ADMIN_VOTES = List.of(VOTE1_ADMIN_RESTAURANT1,VOTE4_ADMIN_RESTAURANT2);

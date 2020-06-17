@@ -16,10 +16,10 @@ VALUES ('User', 'user@yandex.ru', 'password'),
        ('Mike', 'newuser@gmail.com', 'mike');
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('ROLE_ADMIN', 100001),
-       ('ROLE_USER', 100000),
-       ('ROLE_USER', 100001),
-       ('ROLE_USER', 100002);
+VALUES ('ADMIN', 100001),
+       ('USER', 100000),
+       ('USER', 100001),
+       ('USER', 100002);
 
 INSERT INTO restaurants (name)
 VALUES ('Restaurant1'),

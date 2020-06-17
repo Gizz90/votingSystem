@@ -31,7 +31,7 @@ class VoteServiceTest extends AbstractControllerTest {
 
     @Test
     void get() {
-        Vote actual = voteService.get(VOTE1_ID, ADMIN_ID);
+        Vote actual = voteService.get(VOTE1_ID, USER_ADMIN_ID);
         VOTE_MATCHER.assertMatch(actual, VOTE1_ADMIN_RESTAURANT1);
     }
 

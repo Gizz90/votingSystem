@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.graduation.voting.RestaurantTestData.*;
 import static com.graduation.voting.TestUtil.readFromJson;
+import static com.graduation.voting.TestUtil.userHttpBasic;
+import static com.graduation.voting.UserTestData.USER_ADMIN;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,7 +29,8 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID)
+                .with(userHttpBasic(USER_ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -36,7 +39,8 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER_ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -45,7 +49,8 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllWithCurrentMeals() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "onDate?date=2020-04-01"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "onDate?date=2020-04-01")
+                .with(userHttpBasic(USER_ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -57,6 +62,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         Restaurant newRestaurant = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER_ADMIN))
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -73,6 +79,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         Restaurant updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER_ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -82,7 +89,8 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID)
+                .with(userHttpBasic(USER_ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> restaurantService.get(RESTAURANT1_ID));

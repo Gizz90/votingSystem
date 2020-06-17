@@ -18,6 +18,8 @@ import java.time.LocalTime;
 import static com.graduation.voting.RestaurantTestData.RESTAURANT1_ID;
 import static com.graduation.voting.RestaurantTestData.RESTAURANT2_ID;
 import static com.graduation.voting.TestUtil.readFromJson;
+import static com.graduation.voting.TestUtil.userHttpBasic;
+import static com.graduation.voting.UserTestData.USER1;
 import static com.graduation.voting.UserTestData.USER1_ID;
 import static com.graduation.voting.VoteTestData.*;
 import static com.graduation.voting.util.ValidationUtil.isTimeExpired;
@@ -35,7 +37,8 @@ class UserVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "votes"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "votes")
+                .with(userHttpBasic(USER1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(VOTE_MATCHER.contentJson(USER1_VOTES));
@@ -46,6 +49,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
         Vote newVote = VoteTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "restaurants/" + RESTAURANT1_ID + "/votes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER1))
                 .content(JsonUtil.writeValue(newVote)))
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -63,6 +67,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
         if (!isTimeExpired()) {
             perform(MockMvcRequestBuilders.put(REST_URL + "restaurants/" + RESTAURANT1_ID + "/votes/" + VOTE2_ID)
                     .contentType(MediaType.APPLICATION_JSON)
+                    .with(userHttpBasic(USER1))
                     .content(JsonUtil.writeValue(updated)))
                     .andDo(print())
                     .andExpect(status().isNoContent());
