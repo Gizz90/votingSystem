@@ -2,6 +2,7 @@ package com.graduation.voting.web.controller;
 
 import com.graduation.voting.model.User;
 import com.graduation.voting.service.UserService;
+import com.graduation.voting.to.UserTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,10 @@ public class ProfileController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user) {
+    public void update(@RequestBody UserTo userTo) {
         int id = authUserId();
-        log.info("update {} with id={}", user, id);
-        assureIdConsistent(user, id);
-        userService.update(user);
+        log.info("update {} with id={}", userTo, id);
+        assureIdConsistent(userTo, id);
+        userService.update(userTo);
     }
 }

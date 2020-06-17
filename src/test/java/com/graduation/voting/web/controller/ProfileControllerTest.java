@@ -1,8 +1,9 @@
 package com.graduation.voting.web.controller;
 
-import com.graduation.voting.UserTestData;
 import com.graduation.voting.model.User;
 import com.graduation.voting.service.UserService;
+import com.graduation.voting.to.UserTo;
+import com.graduation.voting.util.UserUtil;
 import com.graduation.voting.web.AbstractControllerTest;
 import com.graduation.voting.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -38,12 +39,12 @@ class ProfileControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        User updated = UserTestData.getUpdated();
+        UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
         perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
+                .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        USER_MATCHER.assertMatch(userService.get(USER1_ID), updated);
+        USER_MATCHER.assertMatch(userService.get(USER1_ID), UserUtil.updateFromTo(new User(USER1), updatedTo));
     }
 }

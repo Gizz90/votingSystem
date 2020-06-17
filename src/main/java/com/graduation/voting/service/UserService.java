@@ -2,7 +2,10 @@ package com.graduation.voting.service;
 
 import com.graduation.voting.model.User;
 import com.graduation.voting.repository.UserRepository;
+import com.graduation.voting.to.UserTo;
+import com.graduation.voting.util.UserUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -30,7 +33,13 @@ public class UserService {
 
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        checkNotFoundWithId(userRepository.save(user), user.id());
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void update(UserTo userTo) {
+        User user = get(userTo.id());
+        userRepository.save(UserUtil.updateFromTo(user, userTo));
     }
 
     public void delete(int id) {
