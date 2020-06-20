@@ -4,6 +4,7 @@ import com.graduation.voting.model.Meal;
 import com.graduation.voting.repository.MealRepository;
 import com.graduation.voting.repository.RestaurantRepository;
 import com.graduation.voting.util.exception.NotFoundException;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -30,11 +31,13 @@ public class MealService {
                 .orElse(null), id);
     }
 
+    @CacheEvict(value = "allRestaurantsWithTodayMeals", allEntries = true)
     public void delete(int id, int restaurantId) {
         checkNotFoundWithId(mealRepository.delete(id, restaurantId) != 0, id);
     }
 
     @Transactional
+    @CacheEvict(value = "allRestaurantsWithTodayMeals", allEntries = true)
     public void update(Meal meal, int restaurantId) {
         Assert.notNull(meal, "meal must not be null");
         if (!meal.isNew() && get(meal.getId(), restaurantId) == null) {
@@ -46,6 +49,7 @@ public class MealService {
     }
 
     @Transactional
+    @CacheEvict(value = "allRestaurantsWithTodayMeals", allEntries = true)
     public Meal create(Meal meal, int restaurantId) {
         Assert.notNull(meal, "meal must not be null");
         meal.setRestaurant(restaurantRepository.getOne(restaurantId));

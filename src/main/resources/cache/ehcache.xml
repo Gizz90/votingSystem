@@ -20,6 +20,6 @@
         <heap>1</heap>
     </cache-template>
 
-<!--    <cache alias="restaurants" uses-template="singleNonExpiryCache"/>-->
-<!--    <cache alias="allRestaurantsWithTodayMenu" uses-template="singleNonExpiryCache"/>-->
+    <cache alias="restaurants" uses-template="singleNonExpiryCache"/>
+    <cache alias="allRestaurantsWithTodayMeals" uses-template="singleNonExpiryCache"/>
 </config>
