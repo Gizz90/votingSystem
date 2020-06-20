@@ -10,12 +10,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static com.graduation.voting.util.UserUtil.prepareToSave;
 import static com.graduation.voting.util.ValidationUtil.checkNotFound;
 import static com.graduation.voting.util.ValidationUtil.checkNotFoundWithId;
 
@@ -24,9 +26,11 @@ import static com.graduation.voting.util.ValidationUtil.checkNotFoundWithId;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User get(int id) {
@@ -35,12 +39,12 @@ public class UserService implements UserDetailsService {
 
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
-        return userRepository.save(user);
+        return prepareAndSave(user);
     }
 
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        userRepository.save(user);
+        prepareAndSave(user);
     }
 
     @Transactional
@@ -69,5 +73,9 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
         return new AuthorizedUser(user);
+    }
+
+    private User prepareAndSave(User user) {
+        return userRepository.save(prepareToSave(user, passwordEncoder));
     }
 }

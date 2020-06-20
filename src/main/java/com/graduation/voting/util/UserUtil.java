@@ -3,6 +3,8 @@ package com.graduation.voting.util;
 import com.graduation.voting.model.Role;
 import com.graduation.voting.model.User;
 import com.graduation.voting.to.UserTo;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 public class UserUtil {
 
@@ -20,6 +22,13 @@ public class UserUtil {
         user.setName(userTo.getName());
         user.setEmail(userTo.getEmail().toLowerCase());
         user.setPassword(userTo.getPassword());
+        return user;
+    }
+
+    public static User prepareToSave(User user, PasswordEncoder passwordEncoder) {
+        String password = user.getPassword();
+        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
+        user.setEmail(user.getEmail().toLowerCase());
         return user;
     }
 }
