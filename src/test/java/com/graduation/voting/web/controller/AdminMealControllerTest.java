@@ -69,12 +69,27 @@ class AdminMealControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + 1)
+                .with(userHttpBasic(USER_ADMIN)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + MEAL1_ID)
                 .with(userHttpBasic(USER_ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> mealService.get(MEAL1_ID, RESTAURANT1_ID));
+    }
+
+    @Test
+    void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + 1)
+                .with(userHttpBasic(USER_ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
